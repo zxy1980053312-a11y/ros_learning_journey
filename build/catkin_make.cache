@@ -1,2 +1,0 @@
-helloworld
--DCATKIN_DEVEL_PREFIX=/home/zxy/study_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zxy/study_ws/install -G Unix Makefiles
