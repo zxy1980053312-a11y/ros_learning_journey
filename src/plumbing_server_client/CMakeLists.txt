@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(plumbing_pub_sub)
+project(plumbing_server_client)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -48,17 +48,17 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  person.msg
-  )
+# add_message_files(
+#   FILES
+#   Message1.msg
+#   Message2.msg
+# )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  addints.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -104,8 +104,8 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES plumbing_pub_sub
- CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+#  LIBRARIES plumbing_server_client
+ CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -122,23 +122,20 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/plumbing_pub_sub.cpp
+#   src/${PROJECT_NAME}/plumbing_server_client.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(demo01_pub src/demo01_pub.cpp)
-add_executable(demo02_sub src/demo02_sub.cpp)
-add_executable(demo03_pub_person src/demo03_pub_person.cpp)
-add_executable(demo04_sub_person src/demo04_sub_person.cpp)
-
-add_dependencies(demo03_pub_person ${PROJECT_NAME}_generate_messages_cpp)
-add_dependencies(demo04_sub_person ${PROJECT_NAME}_generate_messages_cpp)
+# add_executable(${PROJECT_NAME}_node src/plumbing_server_client_node.cpp)
+add_executable(demo01_server src/demo01_server.cpp)
+add_executable(demo02_client src/demo02_client.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -148,19 +145,17 @@ add_dependencies(demo04_sub_person ${PROJECT_NAME}_generate_messages_cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(demo01_server ${PROJECT_NAME}_gencpp)
+add_dependencies(demo02_client ${PROJECT_NAME}_gencpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(demo01_pub
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
+# )
+target_link_libraries(demo01_server
   ${catkin_LIBRARIES}
 )
-target_link_libraries(demo02_sub
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(demo03_pub_person
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(demo04_sub_person
+target_link_libraries(demo02_client
   ${catkin_LIBRARIES}
 )
 
@@ -211,7 +206,7 @@ target_link_libraries(demo04_sub_person
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_plumbing_pub_sub.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_plumbing_server_client.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

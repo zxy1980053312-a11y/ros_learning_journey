@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(plumbing_pub_sub)
+project(plumbing_param_server)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -48,10 +47,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  person.msg
-  )
+# add_message_files(
+#   FILES
+#   Message1.msg
+#   Message2.msg
+# )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -68,10 +68,10 @@ add_message_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -104,8 +104,8 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES plumbing_pub_sub
- CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+#  LIBRARIES plumbing_param_server
+#  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -122,24 +122,21 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/plumbing_pub_sub.cpp
+#   src/${PROJECT_NAME}/plumbing_param_server.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(demo01_pub src/demo01_pub.cpp)
-add_executable(demo02_sub src/demo02_sub.cpp)
-add_executable(demo03_pub_person src/demo03_pub_person.cpp)
-add_executable(demo04_sub_person src/demo04_sub_person.cpp)
-
-add_dependencies(demo03_pub_person ${PROJECT_NAME}_generate_messages_cpp)
-add_dependencies(demo04_sub_person ${PROJECT_NAME}_generate_messages_cpp)
-
+# add_executable(${PROJECT_NAME}_node src/plumbing_param_server_node.cpp)
+add_executable(demo01_param_set src/demo01_param_set.cpp)
+add_executable(demo02_param_get src/demo02_param_get.cpp)
+add_executable(demo03_param_del src/demo03_param_del.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -151,16 +148,13 @@ add_dependencies(demo04_sub_person ${PROJECT_NAME}_generate_messages_cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(demo01_pub
+target_link_libraries(demo01_param_set
   ${catkin_LIBRARIES}
 )
-target_link_libraries(demo02_sub
+target_link_libraries(demo02_param_get
   ${catkin_LIBRARIES}
 )
-target_link_libraries(demo03_pub_person
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(demo04_sub_person
+target_link_libraries(demo03_param_del
   ${catkin_LIBRARIES}
 )
 
@@ -211,7 +205,7 @@ target_link_libraries(demo04_sub_person
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_plumbing_pub_sub.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_plumbing_param_server.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
